@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>{{ title }}</title>
+
+  <!-- CSS  -->
+  {{ codemirror.include_codemirror() }}
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+
+  <nav class="black lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">{{ title }}</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/">Analyze</a></li>
+        <li><a href="/profiles">Profiles</a></li>
+        <li><a href="/modules">Modules</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="progress red lighten-4">
+    <div class="indeterminate red"></div>
+  </div>
+  <div class="container">
+    <div class="section">
+      <div class="row navig" style="display:none">
+        <div class="col s2">
+          &nbsp;
+        </div>
+        <div class="col s8">
+          <ul class="tabs">
+            <li class="tab col s3"><a class="active" href="#code">Code</a></li>
+            <li class="tab col s3"><a href="#graph">Graph</a></li>
+          </ul>
+        </div>
+        <div class="col s2">
+          &nbsp;
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div id="code" class="col s12">
+            <div class="row">
+              <div class="col s12">
+                <ul class="collection with-header module-select" style="display:none;">
+                </ul>
+              </div>
+            </div>
+             <div class="row">
+              <div class="col s12 stats right-align" style="font-weight:300;font-size:12px">
+              </div>
+            </div>
+            <form method="POST" class="form">
+              {{ form.csrf_token }}
+              {{ form.source_code }}
+              <br/>
+              {{ form.submit(class_='btn black')}}
+              <div class="right col s5 valign-wrapper">
+                <div class="col s4">
+                  Profile:
+                </div>
+                <select id="profile" style="display:block" class="col s8">
+                  {% for profile in profiles %}
+                  <option value="{{profile}}">{{profile}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </form>
+            <script>
+            var widgets = [];
+            var widgets2 = [];
+            editor = editor_for_source_code;
+            function updateColorState(lines) {
+              editor.operation(function(){
+                for (var i = 0; i < widgets2.length; ++i) {
+                  editor.removeLineClass(widgets2[i],'background', 'green darken-4');
+                }
+                widgets2.length = 0;
+                var issues = lines;
+                for (var i = 0; i < issues.length; ++i) {
+                  widgets2.push(editor.addLineClass(issues[i] - 1, 'background', 'green darken-4'));
+                }
+              });
+              var info = editor.getScrollInfo();
+              var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
+              if (info.top + info.clientHeight < after)
+                editor.scrollTo(null, after - info.clientHeight + 3);
+            }
+            function updateState(sinks) {
+              editor.operation(function(){
+                for (var i = 0; i < widgets.length; ++i)
+                  editor.removeLineWidget(widgets[i]);
+                widgets.length = 0;
+                var issues = sinks;
+                for (var i = 0; i < issues.length; ++i) {
+                  var msg = document.createElement("div");
+                  var icon = msg.appendChild(document.createElement("span"));
+                  icon.innerHTML = "!!";
+                  icon.className = "lint-error-icon";
+                  msg.appendChild(document.createTextNode(issues[i].state));
+                  msg.className = "lint-error";
+                  widgets.push(editor.addLineWidget(issues[i].startLine - 1, msg, {coverGutter: false, noHScroll: true}));
+                }
+              });
+              var info = editor.getScrollInfo();
+              var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
+              if (info.top + info.clientHeight < after)
+                editor.scrollTo(null, after - info.clientHeight + 3);
+            }
+            </script>
+          </div>
+          <div id="graph" class="col s12"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer grey darken-1">
+    <div class="container">
+      <div class="row">
+        <div class="col l8 s12">
+          <h5 class="white-text">What is this?</h5>
+          <p class="grey-text text-lighten-4">{{description}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        This is a Final Year Project done by <a class="blue-text text-lighten-3" href="//quanyang.github.io">Yeo Quan Yang</a>.
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="static/js/jquery.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="static/js/materialize.js"></script>
+  <script src="static/js/init.js"></script>
+
+</body>
+</html>

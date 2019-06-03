@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>{{ title }}</title>
+
+  <!-- CSS  -->
+  {{ codemirror.include_codemirror() }}
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+
+  <nav class="black lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">{{ title }}</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/">Analyze</a></li>
+        <li><a href="/profiles">Profiles</a></li>
+        <li><a href="/modules">Modules</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="progress red lighten-4">
+    <div class="indeterminate red"></div>
+  </div>
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <div class="col l12 s12">
+          <div class="col s12">
+            <ul class="collection with-header toolkit" id="toolkit">
+              <li class="collection-header">
+                <h8>Toolkit (Click to add to end)</h8>
+              </li>
+              {% for traversal in traversals %}
+              <li class="collection-item traversal-add" data="{{traversal.modulename}}" style="display:inline-block">
+                <div class="valign-wrapper">
+                  <i class="material-icons">loop</i>
+                  {{traversal.name}}
+                </div>
+              </li>
+              {% endfor %}
+              {% for module in modules %}
+              <li class="collection-item module-add" data="{{module.modulename}}" style="display:inline-block">
+                <div class="valign-wrapper">
+                  <i class="material-icons">search</i>
+                  {{module.name}}
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col l12 s12">
+          <div class="col s12">
+            <ul class="collection with-header" id="edit-profile">
+              <li class="collection-header">
+                <h5>Profile: {{name}}</h5>
+              </li>
+              {% for traversal in profile %}
+              <li class="collection-header">
+                <!--<i class="material-icons">gear</i>-->
+                <h7>{{traversal.traversal}}</h7>
+                <a href="#!" class="secondary-content delete-traversal" id="{{loop.index}}" data="traversal"><i class="material-icons">delete</i></a>
+              </li>
+              <span id="{{loop.index}}">
+                {% for module in traversal.modules %}
+                <li class="collection-item module-item">
+                  <!---<i class="material-icons">magnify</i>-->
+                  <div>--> {{module[1]}}
+                    <a href="#!" class="secondary-content delete-module" id="{{loop.index}}" data="{{module}}"><i class="material-icons">delete</i></a>
+                  </div>
+                </li>
+                {% endfor %}
+              </span>
+              {% endfor %}
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="module-delete">
+  <div id="md1" class="modal">
+    <input type="hidden" id="filename" value="">
+    <div class="modal-content">
+      <h4>Please Confirm</h4>
+      <p>Are you sure to proceed?</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancel</a>
+      <a href="#" class="waves-effect delete waves-green btn-flat" id="md1_YesBtn">Yes</a>
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer grey darken-1">
+  <div class="container">
+    <div class="row">
+      <div class="col l8 s12">
+        <h5 class="white-text">What is this?</h5>
+        <p class="grey-text text-lighten-4">{{description}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+      This is a Final Year Project done by <a class="blue-text text-lighten-3" href="//quanyang.github.io">Yeo Quan Yang</a>.
+    </div>
+  </div>
+</footer>
+<!--  Scripts-->
+<script>
+var profileName = "{{name}}";
+</script>
+<script src="static/js/jquery.js"></script>
+<script src="static/js/materialize.js"></script>
+<script src="static/js/init.js"></script>
+
+</body>
+</html>

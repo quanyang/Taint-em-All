@@ -1,0 +1,64 @@
+/* Custom Stylesheet */
+/**
+* Use this file to override Materialize files so you can update
+* the core Materialize files in the future
+*
+* Made By MaterializeCSS.com
+*/
+
+.toolkit {
+    overflow: visible;
+}
+
+.traversal-add:hover, .module-add:hover {
+    cursor:pointer;
+}
+
+.draggable {
+    z-index:10;
+}
+
+.CodeMirror {
+    height: auto !important;
+}
+
+.module .modal { 
+    width: 75% !important;
+    min-height: 80% !important;
+}
+
+.module .CodeMirror {
+    height: 360px !important;
+}
+.progress {
+    margin: 0px;
+    display: none;
+}
+
+.module-item:hover {
+    cursor:pointer;
+    background: #e0e0e0;
+}
+
+.overlay {
+    background-color: rgba(0,0,0,0.5);
+    position: absolute;
+    top:0px;
+    bottom: 0px;
+    right:0px;
+    left:0px;
+    z-index:100;
+    display:none;
+}
+.icon-block {
+    padding: 0 15px;
+}
+.icon-block .material-icons {
+    font-size: inherit;
+}
+.CodeMirror {border: 1px solid black;}
+.lint-error {font-family: arial; font-size: 70%; background: #ffa; color: #a00; padding: 2px 5px 3px; }
+.lint-error-icon {color: white; background-color: red; font-weight: bold; border-radius: 50%; padding: 0 3px; margin-right: 7px;}
+svg text {
+    font-size: 10px;
+}

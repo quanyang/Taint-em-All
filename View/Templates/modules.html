@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>{{ title }}</title>
+
+  <!-- CSS  -->
+  {{ codemirror.include_codemirror() }}
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+
+  <nav class="black lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">{{ title }}</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="/">Analyze</a></li>
+        <li><a href="/profiles">Profiles</a></li>
+        <li><a href="/modules">Modules</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="progress red lighten-4">
+    <div class="indeterminate red"></div>
+  </div>
+  <div class="container">
+    <div class="section">
+      <div class="row">
+        <div class="col l12 s12">
+          <div class="col s12">
+            <ul class="collection with-header modules">
+              <li class="collection-header">
+                <a class="btn-floating waves-effect waves-light red right add"><i class="material-icons">add</i></a>
+                <h5>Analysis Modules</h5>
+              </li>
+              {% for module in modules %}
+              <li class="collection-item avatar" id="{{module.filename}}">
+                <div style="float:right">
+                  <a href="#edit" class="btn-floating edit waves-effect waves-light blue"><i class="material-icons">edit</i></a>
+                  <a href="#delete" class="delete-confirm btn-floating waves-effect waves-light blue"><i class="material-icons">delete</i></a>
+                </div>
+                <i class="material-icons circle">folder</i>
+                <span class="title">{{module.name}}</span>
+                <p>Filename: {{module.filename}}<br>Pre-requisite: {{module.prerequisite}}
+                </p>
+              </li>
+              {% endfor %}
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="module-delete">
+  <div id="md1" class="modal">
+    <input type="hidden" id="filename" value="">
+    <div class="modal-content">
+      <h4>Please Confirm</h4>
+      <p>Are you sure to proceed?</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancel</a>
+      <a href="#" class="waves-effect delete waves-green btn-flat" id="md1_YesBtn">Yes</a>
+    </div>
+  </div>
+</div>
+<div class="module">
+  <div id="edit" class="modal">
+    <div class="modal-content">
+      <h4 id="name">Modal Header</h4>
+      <div id="code" class="col s12">
+        <form method="POST" class="form">
+          {{ form.csrf_token }}
+          {{ form.source_code }}
+        </form>
+        <script>
+        var widgets = []
+        editor = editor_for_source_code;
+        </script>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+      <a href="#!" class="ok modal-action waves-effect waves-green btn-flat">Edit</a>
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer grey darken-1">
+  <div class="container">
+    <div class="row">
+      <div class="col l8 s12">
+        <h5 class="white-text">What is this?</h5>
+        <p class="grey-text text-lighten-4">{{description}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+      This is a Final Year Project done by <a class="blue-text text-lighten-3" href="//quanyang.github.io">Yeo Quan Yang</a>.
+    </div>
+  </div>
+</footer>
+
+
+<!--  Scripts-->
+<script src="static/js/jquery.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="static/js/materialize.js"></script>
+<script src="static/js/init.js"></script>
+
+</body>
+</html>
