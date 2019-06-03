@@ -20,6 +20,7 @@ use Symfony\CS\ToolInfo;
  * @author Igor Wiedler <igor@wiedler.ch>
  * @author Stephane PY <py.stephane1@gmail.com>
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
+ * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
 class SelfUpdateCommand extends Command
 {
@@ -54,26 +55,32 @@ EOT
             return 1;
         }
 
-        if (false !== $remoteVersion = @file_get_contents('http://get.sensiolabs.org/php-cs-fixer.version')) {
-            if ($this->getApplication()->getVersion() === $remoteVersion) {
-                $output->writeln('<info>php-cs-fixer is already up to date.</info>');
+        $remoteTag = $this->getRemoteTag();
 
-                return;
-            }
+        if (null === $remoteTag) {
+            $output->writeln('<error>Unable to determine newest version.</error>');
+
+            return;
         }
 
-        $remoteFilename = 'http://get.sensiolabs.org/php-cs-fixer.phar';
+        if ('v'.$this->getApplication()->getVersion() === $remoteTag) {
+            $output->writeln('<info>php-cs-fixer is already up to date.</info>');
+
+            return;
+        }
+
+        $remoteFilename = $this->buildVersionFileUrl($remoteTag);
         $localFilename = $_SERVER['argv'][0];
         $tempFilename = basename($localFilename, '.phar').'-tmp.phar';
 
-        if (false === @file_get_contents($remoteFilename)) {
-            $output->writeln('<error>Unable to download new versions from the server.</error>');
-
-            return 1;
-        }
-
         try {
-            copy($remoteFilename, $tempFilename);
+            $copyResult = @copy($remoteFilename, $tempFilename);
+            if (false === $copyResult) {
+                $output->writeln('<error>Unable to download new versions from the server.</error>');
+
+                return 1;
+            }
+
             chmod($tempFilename, 0777 & ~umask());
 
             // test the phar validity
@@ -94,5 +101,35 @@ EOT
 
             return 1;
         }
+    }
+
+    private function buildVersionFileUrl($tag)
+    {
+        return sprintf('https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/%s/php-cs-fixer.phar', $tag);
+    }
+
+    private function getRemoteTag()
+    {
+        $raw = file_get_contents(
+            'https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/releases/latest',
+            null,
+            stream_context_create(array(
+                'http' => array(
+                    'header' => 'User-Agent: FriendsOfPHP/PHP-CS-Fixer',
+                ),
+            ))
+        );
+
+        if (false === $raw) {
+            return;
+        }
+
+        $json = json_decode($raw, true);
+
+        if (null === $json) {
+            return;
+        }
+
+        return $json['tag_name'];
     }
 }

@@ -25,10 +25,17 @@
         "sebastian/diff": "~1.1"
     },
     "require-dev": {
-        "satooshi/php-coveralls": "0.7.*@dev"
+        "phpunit/phpunit": "^4.5|^5",
+        "satooshi/php-coveralls": "^0.7.1"
+    },
+    "conflict": {
+        "hhvm": "<3.9"
     },
     "autoload": {
         "psr-4": { "Symfony\\CS\\": "Symfony/CS/" }
     },
-    "bin": ["php-cs-fixer"]
+    "bin": ["php-cs-fixer"],
+    "config": {
+        "process-timeout": 0
+    }
 }

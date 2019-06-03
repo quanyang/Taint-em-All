@@ -13,14 +13,15 @@ array(
     0: Stmt_Declare(
         declares: array(
             0: Stmt_DeclareDeclare(
-                key: A
+                key: Identifier(
+                    name: A
+                )
                 value: Scalar_String(
                     value: B
                 )
             )
         )
-        stmts: array(
-        )
+        stmts: null
     )
     1: Stmt_Namespace(
         name: Name(
@@ -33,5 +34,27 @@ array(
     )
     2: Stmt_HaltCompiler(
         remaining: Hi!
+    )
+)
+-----
+<?php
+/* Comment */
+;
+namespace Foo;
+-----
+array(
+    0: Stmt_Nop(
+        comments: array(
+            0: /* Comment */
+        )
+    )
+    1: Stmt_Namespace(
+        name: Name(
+            parts: array(
+                0: Foo
+            )
+        )
+        stmts: array(
+        )
     )
 )

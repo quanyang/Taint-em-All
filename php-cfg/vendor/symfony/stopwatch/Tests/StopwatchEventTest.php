@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Stopwatch\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 
 /**
@@ -20,7 +21,7 @@ use Symfony\Component\Stopwatch\StopwatchEvent;
  *
  * @group time-sensitive
  */
-class StopwatchEventTest extends \PHPUnit_Framework_TestCase
+class StopwatchEventTest extends TestCase
 {
     const DELTA = 37;
 
@@ -42,7 +43,7 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
     public function testGetPeriods()
     {
         $event = new StopwatchEvent(microtime(true) * 1000);
-        $this->assertEquals(array(), $event->getPeriods());
+        $this->assertEquals([], $event->getPeriods());
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
@@ -72,7 +73,7 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
         $event->start();
         usleep(200000);
         $event->stop();
-        $this->assertEquals(200, $event->getDuration(), null, self::DELTA);
+        $this->assertEquals(200, $event->getDuration(), '', self::DELTA);
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
@@ -82,7 +83,7 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
         $event->start();
         usleep(100000);
         $event->stop();
-        $this->assertEquals(200, $event->getDuration(), null, self::DELTA);
+        $this->assertEquals(200, $event->getDuration(), '', self::DELTA);
     }
 
     public function testDurationBeforeStop()
@@ -90,7 +91,7 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
         usleep(200000);
-        $this->assertEquals(200, $event->getDuration(), null, self::DELTA);
+        $this->assertEquals(200, $event->getDuration(), '', self::DELTA);
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
@@ -99,7 +100,7 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
         usleep(50000);
         $event->start();
         usleep(100000);
-        $this->assertEquals(100, $event->getDuration(), null, self::DELTA);
+        $this->assertEquals(100, $event->getDuration(), '', self::DELTA);
     }
 
     /**
@@ -133,7 +134,7 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
         $event->start();
         usleep(100000);
         $event->ensureStopped();
-        $this->assertEquals(300, $event->getDuration(), null, self::DELTA);
+        $this->assertEquals(300, $event->getDuration(), '', self::DELTA);
     }
 
     public function testStartTime()
@@ -150,7 +151,7 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
         $event->start();
         usleep(100000);
         $event->stop();
-        $this->assertEquals(0, $event->getStartTime(), null, self::DELTA);
+        $this->assertEquals(0, $event->getStartTime(), '', self::DELTA);
     }
 
     /**

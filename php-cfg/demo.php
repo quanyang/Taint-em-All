@@ -41,8 +41,6 @@ function getCode($argc, $argv) {
     } else {
         return [__FILE__, <<<'EOF'
 <?php
-$_GET['1'];
-$_GET['2'];
 function foo(array $a) {
     $a[] = 1;
 }

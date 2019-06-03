@@ -27,20 +27,15 @@ class BlanklineAfterOpenTagFixer extends AbstractFixer
     {
         $tokens = Tokens::fromCode($content);
 
-        // ignore non-monolithic files
-        if (!$tokens->isMonolithicPhp()) {
-            return $content;
-        }
-
-        // ignore files with short open tag
-        if (!$tokens[0]->isGivenKind(T_OPEN_TAG)) {
+        // ignore files with short open tag and ignore non-monolithic files
+        if (!$tokens[0]->isGivenKind(T_OPEN_TAG) || !$tokens->isMonolithicPhp()) {
             return $content;
         }
 
         $newlineFound = false;
         /** @var Token $token */
         foreach ($tokens as $token) {
-            if ($token->isWhitespace(array('whitespaces' => "\n"))) {
+            if ($token->isWhitespace() && false !== strpos($token->getContent(), "\n")) {
                 $newlineFound = true;
                 break;
             }
@@ -70,5 +65,14 @@ class BlanklineAfterOpenTagFixer extends AbstractFixer
     public function getDescription()
     {
         return 'Ensure there is no code on the same line as the PHP open tag and it is followed by a blankline.';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriority()
+    {
+        // should be run before the NoBlankLinesBeforeNamespaceFixer 
+        return 1;
     }
 }

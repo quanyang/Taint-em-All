@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\Console\Tests\Input;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputArgument;
 
-class InputArgumentTest extends \PHPUnit_Framework_TestCase
+class InputArgumentTest extends TestCase
 {
     public function testConstructor()
     {
@@ -41,17 +42,22 @@ class InputArgumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidModes($mode)
     {
-        $this->setExpectedException('InvalidArgumentException', sprintf('Argument mode "%s" is not valid.', $mode));
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage(sprintf('Argument mode "%s" is not valid.', $mode));
+        } else {
+            $this->setExpectedException('InvalidArgumentException', sprintf('Argument mode "%s" is not valid.', $mode));
+        }
 
         new InputArgument('foo', $mode);
     }
 
     public function provideInvalidModes()
     {
-        return array(
-            array('ANOTHER_ONE'),
-            array(-1),
-        );
+        return [
+            ['ANOTHER_ONE'],
+            [-1],
+        ];
     }
 
     public function testIsArray()
@@ -85,8 +91,8 @@ class InputArgumentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('another', $argument->getDefault(), '->setDefault() changes the default value');
 
         $argument = new InputArgument('foo', InputArgument::OPTIONAL | InputArgument::IS_ARRAY);
-        $argument->setDefault(array(1, 2));
-        $this->assertEquals(array(1, 2), $argument->getDefault(), '->setDefault() changes the default value');
+        $argument->setDefault([1, 2]);
+        $this->assertEquals([1, 2], $argument->getDefault(), '->setDefault() changes the default value');
     }
 
     /**

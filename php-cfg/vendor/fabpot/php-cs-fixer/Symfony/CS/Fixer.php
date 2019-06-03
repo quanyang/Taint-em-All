@@ -24,7 +24,7 @@ use Symfony\CS\Tokenizer\Tokens;
  */
 class Fixer
 {
-    const VERSION = '1.11.1';
+    const VERSION = '1.11.8';
 
     protected $fixers = array();
     protected $configs = array();
@@ -78,7 +78,10 @@ class Fixer
         }
     }
 
-    public function registerCustomFixers($fixers)
+    /**
+     * @param FixerInterface[] $fixers
+     */
+    public function registerCustomFixers(array $fixers)
     {
         foreach ($fixers as $fixer) {
             $this->addFixer($fixer);
@@ -95,7 +98,7 @@ class Fixer
      */
     public function getFixers()
     {
-        $this->sortFixers();
+        $this->fixers = $this->sortFixers($this->fixers);
 
         return $this->fixers;
     }
@@ -131,19 +134,19 @@ class Fixer
     public function fix(ConfigInterface $config, $dryRun = false, $diff = false)
     {
         $fixers = $this->prepareFixers($config);
-        $changed = array();
+        $fixers = $this->sortFixers($fixers);
 
+        $changed = array();
         if ($this->stopwatch) {
             $this->stopwatch->openSection();
         }
 
-        $fileCacheManager = new FileCacheManager($config->usingCache(), $config->getDir(), $config->getFixers());
+        $fileCacheManager = new FileCacheManager($config->usingCache(), $config->getDir(), $fixers);
 
-        foreach ($config->getFinder() as $file) {
-            if ($file->isDir() || $file->isLink()) {
-                continue;
-            }
+        $finder = $config->getFinder();
+        $finderIterator = $finder instanceof \IteratorAggregate ? $finder->getIterator() : $finder;
 
+        foreach (new UniqueFileIterator($finderIterator) as $file) {
             if ($this->stopwatch) {
                 $this->stopwatch->start($this->getFileRelativePathname($file));
             }
@@ -212,6 +215,32 @@ class Fixer
                 }
                 $new = $newest;
             }
+        } catch (\ParseError $e) {
+            if ($this->eventDispatcher) {
+                $this->eventDispatcher->dispatch(
+                    FixerFileProcessedEvent::NAME,
+                    FixerFileProcessedEvent::create()->setStatus(FixerFileProcessedEvent::STATUS_LINT)
+                );
+            }
+
+            if ($this->errorsManager) {
+                $this->errorsManager->report(ErrorsManager::ERROR_TYPE_LINT, $this->getFileRelativePathname($file), sprintf('Linting error at line %d: "%s".', $e->getLine(), $e->getMessage()));
+            }
+
+            return;
+        } catch (\Error $e) {
+            if ($this->eventDispatcher) {
+                $this->eventDispatcher->dispatch(
+                    FixerFileProcessedEvent::NAME,
+                    FixerFileProcessedEvent::create()->setStatus(FixerFileProcessedEvent::STATUS_EXCEPTION)
+                );
+            }
+
+            if ($this->errorsManager) {
+                $this->errorsManager->report(ErrorsManager::ERROR_TYPE_EXCEPTION, $this->getFileRelativePathname($file), $e->__toString());
+            }
+
+            return;
         } catch (\Exception $e) {
             if ($this->eventDispatcher) {
                 $this->eventDispatcher->dispatch(
@@ -333,13 +362,25 @@ class Fixer
         return $diff;
     }
 
-    private function sortFixers()
+    /**
+     * @param FixerInterface[] $fixers
+     *
+     * @return FixerInterface[]
+     */
+    private function sortFixers(array $fixers)
     {
-        usort($this->fixers, function (FixerInterface $a, FixerInterface $b) {
+        usort($fixers, function (FixerInterface $a, FixerInterface $b) {
             return Utils::cmpInt($b->getPriority(), $a->getPriority());
         });
+
+        return $fixers;
     }
 
+    /**
+     * @param ConfigInterface $config
+     *
+     * @return FixerInterface[]
+     */
     private function prepareFixers(ConfigInterface $config)
     {
         $fixers = $config->getFixers();

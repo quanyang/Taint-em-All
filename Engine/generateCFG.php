@@ -20,6 +20,5 @@ if (file_exists($filename)) {
     $block = $parser->parse($code, $filename);
     $traverser->traverse($block);
     $printer = new PHPCfg\Printer\Json;
-    //print_r($printer->printScript($block));
     echo json_encode($printer->printScript($block));
 }

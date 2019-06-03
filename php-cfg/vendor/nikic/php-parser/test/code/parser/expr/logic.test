@@ -21,60 +21,27 @@ $a = $b || $c;
 $a = $b or $c;
 -----
 array(
-    0: Expr_BinaryOp_BooleanAnd(
-        left: Expr_Variable(
-            name: a
-        )
-        right: Expr_Variable(
-            name: b
-        )
-    )
-    1: Expr_BinaryOp_BooleanOr(
-        left: Expr_Variable(
-            name: a
-        )
-        right: Expr_Variable(
-            name: b
-        )
-    )
-    2: Expr_BooleanNot(
-        expr: Expr_Variable(
-            name: a
-        )
-    )
-    3: Expr_BooleanNot(
-        expr: Expr_BooleanNot(
-            expr: Expr_Variable(
+    0: Stmt_Expression(
+        expr: Expr_BinaryOp_BooleanAnd(
+            left: Expr_Variable(
                 name: a
+                comments: array(
+                    0: // boolean ops
+                )
+            )
+            right: Expr_Variable(
+                name: b
+            )
+            comments: array(
+                0: // boolean ops
             )
         )
-    )
-    4: Expr_BinaryOp_LogicalAnd(
-        left: Expr_Variable(
-            name: a
-        )
-        right: Expr_Variable(
-            name: b
+        comments: array(
+            0: // boolean ops
         )
     )
-    5: Expr_BinaryOp_LogicalOr(
-        left: Expr_Variable(
-            name: a
-        )
-        right: Expr_Variable(
-            name: b
-        )
-    )
-    6: Expr_BinaryOp_LogicalXor(
-        left: Expr_Variable(
-            name: a
-        )
-        right: Expr_Variable(
-            name: b
-        )
-    )
-    7: Expr_BinaryOp_BooleanOr(
-        left: Expr_BinaryOp_BooleanAnd(
+    1: Stmt_Expression(
+        expr: Expr_BinaryOp_BooleanOr(
             left: Expr_Variable(
                 name: a
             )
@@ -82,21 +49,120 @@ array(
                 name: b
             )
         )
-        right: Expr_BinaryOp_BooleanAnd(
+    )
+    2: Stmt_Expression(
+        expr: Expr_BooleanNot(
+            expr: Expr_Variable(
+                name: a
+            )
+        )
+    )
+    3: Stmt_Expression(
+        expr: Expr_BooleanNot(
+            expr: Expr_BooleanNot(
+                expr: Expr_Variable(
+                    name: a
+                )
+            )
+        )
+    )
+    4: Stmt_Expression(
+        expr: Expr_BinaryOp_LogicalAnd(
             left: Expr_Variable(
-                name: c
+                name: a
+                comments: array(
+                    0: // logical ops
+                )
+            )
+            right: Expr_Variable(
+                name: b
+            )
+            comments: array(
+                0: // logical ops
+            )
+        )
+        comments: array(
+            0: // logical ops
+        )
+    )
+    5: Stmt_Expression(
+        expr: Expr_BinaryOp_LogicalOr(
+            left: Expr_Variable(
+                name: a
+            )
+            right: Expr_Variable(
+                name: b
+            )
+        )
+    )
+    6: Stmt_Expression(
+        expr: Expr_BinaryOp_LogicalXor(
+            left: Expr_Variable(
+                name: a
+            )
+            right: Expr_Variable(
+                name: b
+            )
+        )
+    )
+    7: Stmt_Expression(
+        expr: Expr_BinaryOp_BooleanOr(
+            left: Expr_BinaryOp_BooleanAnd(
+                left: Expr_Variable(
+                    name: a
+                    comments: array(
+                        0: // precedence
+                    )
+                )
+                right: Expr_Variable(
+                    name: b
+                )
+                comments: array(
+                    0: // precedence
+                )
+            )
+            right: Expr_BinaryOp_BooleanAnd(
+                left: Expr_Variable(
+                    name: c
+                )
+                right: Expr_Variable(
+                    name: d
+                )
+            )
+            comments: array(
+                0: // precedence
+            )
+        )
+        comments: array(
+            0: // precedence
+        )
+    )
+    8: Stmt_Expression(
+        expr: Expr_BinaryOp_BooleanAnd(
+            left: Expr_BinaryOp_BooleanAnd(
+                left: Expr_Variable(
+                    name: a
+                )
+                right: Expr_BinaryOp_BooleanOr(
+                    left: Expr_Variable(
+                        name: b
+                    )
+                    right: Expr_Variable(
+                        name: c
+                    )
+                )
             )
             right: Expr_Variable(
                 name: d
             )
         )
     )
-    8: Expr_BinaryOp_BooleanAnd(
-        left: Expr_BinaryOp_BooleanAnd(
-            left: Expr_Variable(
+    9: Stmt_Expression(
+        expr: Expr_Assign(
+            var: Expr_Variable(
                 name: a
             )
-            right: Expr_BinaryOp_BooleanOr(
+            expr: Expr_BinaryOp_BooleanOr(
                 left: Expr_Variable(
                     name: b
                 )
@@ -105,34 +171,20 @@ array(
                 )
             )
         )
-        right: Expr_Variable(
-            name: d
-        )
     )
-    9: Expr_Assign(
-        var: Expr_Variable(
-            name: a
-        )
-        expr: Expr_BinaryOp_BooleanOr(
-            left: Expr_Variable(
-                name: b
+    10: Stmt_Expression(
+        expr: Expr_BinaryOp_LogicalOr(
+            left: Expr_Assign(
+                var: Expr_Variable(
+                    name: a
+                )
+                expr: Expr_Variable(
+                    name: b
+                )
             )
             right: Expr_Variable(
                 name: c
             )
-        )
-    )
-    10: Expr_BinaryOp_LogicalOr(
-        left: Expr_Assign(
-            var: Expr_Variable(
-                name: a
-            )
-            expr: Expr_Variable(
-                name: b
-            )
-        )
-        right: Expr_Variable(
-            name: c
         )
     )
 )

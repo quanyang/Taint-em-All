@@ -40,21 +40,19 @@ FALSE;
 378282246310005.0;
 10000000000000002.0;
 
-// strings (normalized to single quoted)
+// strings (single quoted)
 'a';
 'a
 b';
+'a\'b';
+'a\b';
+'a\\';
+
+// strings (double quoted)
 "a";
 "a\nb";
-'a\'b';
 "a'b";
 "a\b";
-<<<'STR'
-a\nb$a
-{$b}
-STR;
-
-// strings (normalized to double quoted)
 "$a";
 "a$b";
 "$a$b";
@@ -68,9 +66,6 @@ STR;
 "\\{ $A }";
 "{$$A}[B]";
 "$$A[B]";
-<<<STR
-a\nb$a\n{$b}
-STR;
 
 // make sure indentation doesn't mess anything up
 function foo()
@@ -81,6 +76,12 @@ b';
     'a
     b';
 }
+
+// shell exec (similar to double quoted string)
+`foo`;
+`foo$a`;
+`foo{$a}bar`;
+`\`\'\"`;
 -----
 // magic constants
 __LINE__;
@@ -101,9 +102,9 @@ FALSE;
 // integers (normalized to decimal)
 0;
 11;
-9;
-17;
-3;
+011;
+0x11;
+0b11;
 // floats (normalized to ... something)
 0.0;
 0.0;
@@ -111,24 +112,23 @@ FALSE;
 0.0;
 1.0;
 1.0E+100;
-INF;
+\INF;
 1.0E-100;
 1.0E+84;
 378282246310005.0;
 10000000000000002.0;
-// strings (normalized to single quoted)
+// strings (single quoted)
 'a';
 'a
 b';
-'a';
-'a
-b';
-'a\'b';
 'a\'b';
 'a\\b';
-'a\\nb$a
-{$b}';
-// strings (normalized to double quoted)
+'a\\';
+// strings (double quoted)
+"a";
+"a\nb";
+"a'b";
+"a\\b";
 "{$a}";
 "a{$b}";
 "{$a}{$b}";
@@ -142,14 +142,17 @@ b';
 "\\{ {$A} }";
 "{${$A}}[B]";
 "\${$A['B']}";
-"a\nb{$a}\n{$b}";
 // make sure indentation doesn't mess anything up
 function foo()
 {
-    'a
-b';
+    "a\nb";
     'a
 b';
     'a
     b';
 }
+// shell exec (similar to double quoted string)
+`foo`;
+`foo{$a}`;
+`foo{$a}bar`;
+`\`\\'\\"`;

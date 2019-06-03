@@ -25,6 +25,57 @@ class NewWithBracesFixer extends AbstractFixer
      */
     public function fix(\SplFileInfo $file, $content)
     {
+        static $nextTokenKinds = null;
+
+        if (null === $nextTokenKinds) {
+            $nextTokenKinds = array(
+                '?',
+                ';',
+                ',',
+                '(',
+                ')',
+                '[',
+                ']',
+                ':',
+                '<',
+                '>',
+                '+',
+                '-',
+                '*',
+                '/',
+                '%',
+                '&',
+                '^',
+                '|',
+                array(T_CLASS),
+                array(T_IS_SMALLER_OR_EQUAL),
+                array(T_IS_GREATER_OR_EQUAL),
+                array(T_IS_EQUAL),
+                array(T_IS_NOT_EQUAL),
+                array(T_IS_IDENTICAL),
+                array(T_IS_NOT_IDENTICAL),
+                array(T_CLOSE_TAG),
+                array(T_LOGICAL_AND),
+                array(T_LOGICAL_OR),
+                array(T_LOGICAL_XOR),
+                array(T_BOOLEAN_AND),
+                array(T_BOOLEAN_OR),
+                array(T_SL),
+                array(T_SR),
+                array(T_INSTANCEOF),
+                array(T_AS),
+                array(T_DOUBLE_ARROW),
+            );
+
+            if (defined('T_POW')) {
+                $nextTokenKinds[] = array(T_POW);
+            }
+
+            if (defined('T_SPACESHIP')) {
+                $nextTokenKinds[] = array(T_SPACESHIP);
+            }
+        }
+
         $tokens = Tokens::fromCode($content);
 
         for ($index = $tokens->count() - 3; $index > 0; --$index) {
@@ -34,8 +85,17 @@ class NewWithBracesFixer extends AbstractFixer
                 continue;
             }
 
-            $nextIndex = $tokens->getNextTokenOfKind($index, array(';', ',', '(', ')', '[', ']', ':', array(T_CLOSE_TAG)));
+            $nextIndex = $tokens->getNextTokenOfKind($index, $nextTokenKinds);
             $nextToken = $tokens[$nextIndex];
+
+            // new anonymous class definition
+            if ($nextToken->isGivenKind(T_CLASS)) {
+                if (!$tokens[$tokens->getNextMeaningfulToken($nextIndex)]->equals('(')) {
+                    $this->insertBracesAfter($tokens, $nextIndex);
+                }
+
+                continue;
+            }
 
             // entrance into array index syntax - need to look for exit
             while ($nextToken->equals('[')) {
@@ -54,9 +114,7 @@ class NewWithBracesFixer extends AbstractFixer
                 continue;
             }
 
-            $meaningBeforeNextIndex = $tokens->getPrevMeaningfulToken($nextIndex);
-
-            $tokens->insertAt($meaningBeforeNextIndex + 1, array(new Token('('), new Token(')')));
+            $this->insertBracesAfter($tokens, $tokens->getPrevMeaningfulToken($nextIndex));
         }
 
         return $tokens->generateCode();
@@ -68,5 +126,14 @@ class NewWithBracesFixer extends AbstractFixer
     public function getDescription()
     {
         return 'All instances created with new keyword must be followed by braces.';
+    }
+
+    /**
+     * @param Tokens $tokens
+     * @param int    $index
+     */
+    private function insertBracesAfter(Tokens $tokens, $index)
+    {
+        $tokens->insertAt(++$index, array(new Token('('), new Token(')')));
     }
 }

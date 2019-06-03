@@ -3,16 +3,89 @@ CHANGELOG for PHP CS Fixer
 
 This file contains changelogs for stable releases only.
 
+Changelog for v1.11.8
+---------------------
+
+* bug #2143 ReadmeCommand - fix running command on phar file (keradus)
+* minor #2129 Add .gitattributes to remove unneeded files (Slamdunk)
+* minor #2141 Move phar building to PHP 5.6 job as newest box.phar is no longer working on 5.3 (keradus)
+
+Changelog for v1.11.7
+---------------------
+
+* bug #2108 ShortArraySyntaxFixer, TernarySpacesFixer, UnalignEqualsFixer - fix priority bug (SpacePossum)
+* bug #2092 ConcatWithoutSpacesFixer, OperatorsSpacesFixer - fix too many spaces, fix incorrect fixing of lines with comments (SpacePossum)
+
+Changelog for v1.11.6
+---------------------
+
+* bug #2086 Braces - fix bug with comment in method prototype (keradus)
+* bug #2077 SingleLineAfterImportsFixer - Do not remove lines between use cases (SpacePossum)
+* bug #2079 TernarySpacesFixer - Remove multiple spaces (SpacePossum)
+* bug #2087 Fixer - handle PHP7 Errors as well (keradus)
+* bug #2072 LowercaseKeywordsFixer - handle CT_CLASS_CONSTANT (tgabi333)
+* bug #2066 LineAfterNamespaceFixer - Handle close tag (SpacePossum)
+* bug #2057 LineAfterNamespaceFixer - adding too much extra lines where namespace is last statement (keradus)
+* bug #2059 OperatorsSpacesFixer - handle declare statement (keradus)
+* bug #2060 UnusedUseFixer - fix handling whitespaces around removed import (keradus)
+* minor #2071 ShortEchoTagFixer - allow to run tests on PHP 5.3 (keradus)
+
+Changelog for v1.11.5
+---------------------
+
+* bug #2012 Properly build phar file for lowest supported PHP version (keradus)
+* bug #2037 BracesFixer - add support for anonymous classes (keradus)
+* bug #1989 Add support for PHP 7 namespaces (SpacePossum)
+* bug #2019 Fixing newlines added after curly brace string index access (jaydiablo)
+* bug #1840 [Bug] BracesFixer - Do add a line before close tag (SpacePossum)
+* bug #1994 EchoToPrintFixer - Fix T_OPEN_TAG_WITH_ECHO on hhvm (keradus)
+* bug #1970 Tokens - handle semi-reserved PHP 7 keywords (keradus)
+* minor #2017 PHP7 integration tests (keradus)
+* minor #1465 Bump supported HHVM version, improve ShortEchoTagFixer on HHVM (keradus)
+* minor #1995 Rely on own phpunit, not one from CI service (keradus)
+
+Changelog for v1.11.4
+---------------------
+
+* bug #1956 SelfUpdateCommand - don't update to non-stable version (keradus)
+* bug #1963 Fix not wanted unneeded_control_parentheses fixer for clone (Soullivaneuh)
+* bug #1960 Fix invalid test cases (keradus)
+* bug #1939 BracesFixer - fix handling comment around control token (keradus)
+* minor #1927 NewWithBracesFixer - remove invalid testcase (keradus)
+
+Changelog for v1.11.3
+---------------------
+
+* bug #1868 NewWithBracesFixer - fix handling more neighbor tokens (keradus)
+* bug #1893 BracesFixer - handle comments inside lambda function prototype (keradus)
+* bug #1806 SelfAccessorFixer - skip anonymous classes (gharlan)
+* bug #1813 BlanklineAfterOpenTagFixer, NoBlankLinesBeforeNamespaceFixer - fix priority (SpacePossum)
+* minor #1807 Tokens - simplify isLambda() (gharlan)
+
+Changelog for v1.11.2
+---------------------
+
+* bug #1776 EofEndingFixer - new line on end line comment is allowed (Slamdunk)
+* bug #1775 FileCacheManager - ignore corrupted serialized data (keradus)
+* bug #1769 FunctionDeclarationFixer - fix more cases (keradus)
+* bug #1747 Fixer - Fix ordering of fixer when both level and custom fixers are used (SpacePossum)
+* bug #1744 Fixer - fix rare situation when file was visited twice (keradus)
+* bug #1710 LowercaseConstantFixer - Fix comment cases. (SpacePossum)
+* bug #1711 FunctioncallSpaceFixer - do not touch function declarations. (SpacePossum)
+* minor #1798 LintManager - meaningful tempnam (Slamdunk)
+* minor #1759 UniqueFileIterator - performance improvement (GrahamCampbell)
+* minor #1745 appveyor - fix build (keradus)
+
 Changelog for v1.11.1
 ---------------------
 
-* minor #1653 Update license year (gharlan)
 * bug #1680 NewWithBracesFixer - End tags  (SpacePossum)
 * bug #1685 EmptyReturnFixer - Make independent of LowercaseConstantsFixer (SpacePossum)
 * bug #1640 IntegrationTest - fix directory separator (keradus)
 * bug #1595 ShortTagFixer - fix priority (keradus)
 * bug #1576 SpacesBeforeSemicolonFixer - do not remove space before semicolon if that space is after a semicolon (SpacePossum)
 * bug #1570 UnneededControlParenthesesFixer - fix test samples (keradus)
+* minor #1653 Update license year (gharlan)
 
 Changelog for v1.11
 -------------------
