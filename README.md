@@ -1,6 +1,8 @@
 # Taint'em All
 
-Used in the blog post ()[https://quanyang.github.io/part-1-continuous-pwning/]
+This is a taint analysis tool for the PHP language and it makes use of Static Taint Analysis + Symbolic Execution to achieve high recall and high precision. This analysis tool was written using the framework designed and implemented as part of the project.
+
+Used in this blog post [https://quanyang.github.io/part-1-continuous-pwning/](https://quanyang.github.io/part-1-continuous-pwning/). 
 
 ## Dependencies:
 ```
