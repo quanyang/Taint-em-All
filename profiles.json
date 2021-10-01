@@ -1,1 +1,28 @@
-{"default": [{"modules": [["Module.LivenessVisitor", "Liveness Analysis Visitor"], ["Module.StaticTaintAnalysisVisitor", "Static Taint Analysis Visitor"], ["Module.SymbolicExecutionVisitor", "Symbolic Execution Visitor"]], "traversal": "DFSTraverser"}], "test": [{"modules": [["Module.StaticTaintAnalysisVisitor", "Static Taint Analysis Visitor"]], "traversal": "DFSTraverser"}], "2": [], "1": [{"modules": [["Module.StaticTaintAnalysisVisitor", "Static Taint Analysis Visitor"], ["Module.SymbolicExecutionVisitor", "Symbolic Execution Visitor"]], "traversal": "DFSTraverser"}]}
+{
+  "taint&symbolic": [
+    {
+      "modules": [
+        [
+          "Module.StaticTaintAnalysisVisitor",
+          "Static Taint Analysis Visitor"
+        ],
+        [
+          "Module.SymbolicExecutionVisitor",
+          "Symbolic Execution Visitor"
+        ]
+      ],
+      "traversal": "DFSTraverser"
+    }
+  ],
+  "taint": [
+    {
+      "modules": [
+        [
+          "Module.StaticTaintAnalysisVisitor",
+          "Static Taint Analysis Visitor"
+        ]
+      ],
+      "traversal": "DFSTraverser"
+    }
+  ]
+}
