@@ -7,11 +7,14 @@ function getFullSource($filename){
     preg_match_all("/(\s*(include|require)(_once)?\s*\(?(.*?)\)?;)/", $original, $queue, PREG_SET_ORDER);
     while (count($queue) > 0){
         $val = array_shift($queue);
-        $file = trim(str_replace(array("'",'"',';',')'),"",$val[4]));
+        $file_val = $val[4];
+        $file_val = str_replace(array("dirname(__FILE__)", "__DIR__"), "", $file_val);
+        $file = trim(str_replace(array("'",'"',';',')'),"",$file_val));
         $include_once = strlen($val[3]) > 0;
         if ($include_once) {
-            $file = trim(str_replace(array("'",'"',';',')'),"",$val[4]));
+            $file = trim(str_replace(array("'",'"',';',')'),"",$file_val));
         }
+
         $content = "?>".trim(@file_get_contents($basePath.$file))."?><?php";
 
         if($include_once && in_array($file,$included)) {
