@@ -23,13 +23,13 @@ php-cfg and its dependencies are already included in the src folder.
 ***Mac OS X***
 ```
 pip install -r requirements.txt
-brew install graphviz, z3
+brew install graphviz z3 php
 ```
 
 ***Linux***
 ```
 pip install -r requirements.txt
-apt-get install graphviz
+apt-get install graphviz php-cli
 ```
 
 ## GUI Usage:
